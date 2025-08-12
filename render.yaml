@@ -1,0 +1,37 @@
+services:
+  # The MongoDB Database
+  - type: pserv
+    name: mongo
+    env: docker
+    dockerfilePath: ./Dockerfile.mongo
+    disk:
+      name: mongo-data
+      mountPath: /data/db
+    plan: free
+
+  # The Backend Server
+  - type: web
+    name: server
+    env: node
+    rootDir: ./server
+    buildCommand: "npm install"
+    startCommand: "node server.js"
+    envVars:
+      - key: MONGO_URI
+        fromService:
+          type: pserv
+          name: mongo
+          property: connectionString
+      - key: JWT_SECRET
+        generateValue: true # Render will generate a random secret for us
+
+  # The Frontend Client
+  - type: static
+    name: client
+    rootDir: ./client
+    buildCommand: "npm install && npm run build"
+    publishDir: ./client/build
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
