@@ -23,10 +23,10 @@ services:
           name: mongo
           property: connectionString
       - key: JWT_SECRET
-        generateValue: true # Render will generate a random secret for us
+        generateValue: true
 
   # The Frontend Client
-  - type: static
+  - type: static site # This line is now corrected
     name: client
     rootDir: ./client
     buildCommand: "npm install && npm run build"
