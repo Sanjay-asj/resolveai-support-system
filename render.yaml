@@ -22,8 +22,8 @@ services:
           type: pserv
           name: mongo
           property: connectionString
-      - key: JWT_SECRET
-        generateValue: true
+  - key: JWT_SECRET
+    generateValue: true
 
   # The Frontend Client
   - type: static_site # This line is now corrected
