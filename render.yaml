@@ -1,12 +1,8 @@
 services:
-  # The MongoDB Database
-  - type: pserv
+  # Use Render's official free MongoDB service
+  - type: db
     name: mongo
-    env: docker
-    dockerfilePath: ./Dockerfile.mongo
-    disk:
-      name: mongo-data
-      mountPath: /data/db
+    databaseName: resolveai_db
     plan: free
 
   # The Backend Server
@@ -18,9 +14,19 @@ services:
     startCommand: "node server.js"
     envVars:
       - key: MONGO_URI
-        fromService:
-          type: pserv
+        fromDatabase:
           name: mongo
           property: connectionString
       - key: JWT_SECRET
         generateValue: true
+
+  # The Frontend Client
+  - type: static_site
+    name: client
+    rootDir: ./client
+    buildCommand: "npm install && npm run build"
+    publishDir: ./client/build
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
