@@ -24,14 +24,3 @@ services:
           property: connectionString
       - key: JWT_SECRET
         generateValue: true
-
-  # The Frontend Client
-  - type: static_site
-    name: client
-    rootDir: ./client
-    buildCommand: "npm install && npm run build"
-    publishDir: ./client/build
-    routes:
-      - type: rewrite
-        source: /*
-        destination: /index.html
