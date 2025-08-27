@@ -22,11 +22,11 @@ services:
           type: pserv
           name: mongo
           property: connectionString
-  - key: JWT_SECRET
-    generateValue: true
+      - key: JWT_SECRET      # This was indented incorrectly
+        generateValue: true # This was indented incorrectly
 
   # The Frontend Client
-  - type: static_site # This line is now corrected
+  - type: static_site
     name: client
     rootDir: ./client
     buildCommand: "npm install && npm run build"
