@@ -22,8 +22,8 @@ services:
           type: pserv
           name: mongo
           property: connectionString
-      - key: JWT_SECRET      # This was indented incorrectly
-        generateValue: true # This was indented incorrectly
+      - key: JWT_SECRET
+        generateValue: true
 
   # The Frontend Client
   - type: static_site
