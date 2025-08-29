@@ -2,7 +2,7 @@
 
     // Create a central instance of axios
     const api = axios.create({
-      baseURL: 'https://YOUR_LIVE_SERVER_URL_GOES_HERE/api', // <-- PASTE YOUR LIVE SERVER URL HERE
+      baseURL: 'https://resolveai-server.onrender.com/api', // <-- PASTE YOUR LIVE SERVER URL HERE
       headers: {
         'Content-Type': 'application/json'
       }
