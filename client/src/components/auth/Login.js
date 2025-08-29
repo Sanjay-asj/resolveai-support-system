@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 import { getUserRole } from '../../utils/auth';
+import api from '../../utils/api';
 
 const Login = () => {
   const [formData, setFormData] = useState({ email: '', password: '' });
@@ -13,15 +13,15 @@ const Login = () => {
   const onSubmit = async e => {
     e.preventDefault();
     try {
-      const res = await axios.post('http://localhost:5000/api/users/login', { email, password });
+      const res = await api.post('/users/login', { email, password });
       localStorage.setItem('token', res.data.token);
       alert('Login successful!');
       
       const role = getUserRole();
       if (role === 'agent') {
-        navigate('/dashboard', { replace: true }); // This line is updated
+        navigate('/dashboard', { replace: true });
       } else {
-        navigate('/submit', { replace: true }); // This line is updated
+        navigate('/submit', { replace: true });
       }
     } catch (err) {
       alert('Login failed. Please check your credentials.');

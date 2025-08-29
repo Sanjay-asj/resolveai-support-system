@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import { useParams, Link } from 'react-router-dom';
+import api from '../../utils/api';
 import { getUserRole } from '../../utils/auth';
 
 const TicketView = () => {
@@ -9,10 +9,8 @@ const TicketView = () => {
   const { id } = useParams();
 
   const fetchTicket = async () => {
-    const token = localStorage.getItem('token');
-    const config = { headers: { 'x-auth-token': token } };
     try {
-      const res = await axios.get(`http://localhost:5000/api/tickets/${id}`, config);
+      const res = await api.get(`/tickets/${id}`);
       setTicket(res.data);
     } catch (err) {
       console.error(err);
@@ -25,10 +23,8 @@ const TicketView = () => {
 
   const onCommentSubmit = async (e) => {
     e.preventDefault();
-    const token = localStorage.getItem('token');
-    const config = { headers: { 'Content-Type': 'application/json', 'x-auth-token': token } };
     try {
-      await axios.post(`http://localhost:5000/api/tickets/${id}/comments`, { text: comment }, config);
+      await api.post(`/tickets/${id}/comments`, { text: comment });
       setComment('');
       fetchTicket();
     } catch (err) {
@@ -36,19 +32,15 @@ const TicketView = () => {
     }
   };
 
-  // --- NEW STATUS UPDATE FUNCTION ---
   const handleStatusChange = async (newStatus) => {
     try {
-      const token = localStorage.getItem('token');
-      const config = { headers: { 'x-auth-token': token } };
-      const body = { status: newStatus };
-      await axios.put(`http://localhost:5000/api/tickets/${id}`, body, config);
-      fetchTicket(); // Refresh the ticket
+      await api.put(`/tickets/${id}`, { status: newStatus });
+      fetchTicket();
     } catch (err) {
       alert('Failed to update status.');
     }
   };
-
+  
   if (!ticket) {
     return <div>Loading...</div>;
   }
@@ -64,7 +56,6 @@ const TicketView = () => {
             {ticket.status}
           </span>
         </div>
-        {/* --- NEW STATUS DROPDOWN FOR AGENTS --- */}
         {userRole === 'agent' && (
           <div>
             <label className="text-xs text-gray-500">Change Status</label>
@@ -94,7 +85,7 @@ const TicketView = () => {
           ))}
         </div>
       </div>
-
+      
       <div className="mt-8">
         <form onSubmit={onCommentSubmit}>
           <textarea

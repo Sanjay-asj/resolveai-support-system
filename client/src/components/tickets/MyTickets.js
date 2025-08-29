@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import { Link } from 'react-router-dom';
+import api from '../../utils/api';
 
 const MyTickets = () => {
   const [tickets, setTickets] = useState([]);
@@ -8,12 +8,10 @@ const MyTickets = () => {
   useEffect(() => {
     const fetchTickets = async () => {
       try {
-        const token = localStorage.getItem('token');
-        const config = { headers: { 'x-auth-token': token } };
-        const res = await axios.get('http://localhost:5000/api/tickets/mytickets', config);
+        const res = await api.get('/tickets/mytickets');
         setTickets(res.data);
       } catch (err) {
-        console.error(err.response ? err.response.data : err.message);
+        console.error(err);
       }
     };
     fetchTickets();

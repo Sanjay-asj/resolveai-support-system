@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
+import api from '../../utils/api';
 
 const Register = () => {
   const [formData, setFormData] = useState({ email: '', password: '', role: 'customer' });
@@ -12,7 +12,7 @@ const Register = () => {
   const onSubmit = async e => {
     e.preventDefault();
     try {
-      const res = await axios.post('http://localhost:5000/api/users/register', { email, password, role });
+      const res = await api.post('/users/register', { email, password, role });
       localStorage.setItem('token', res.data.token);
       alert('Registration successful!');
       navigate('/submit');
@@ -59,7 +59,6 @@ const Register = () => {
             </Link>
           </div>
         </form>
-        {/* NEW BACK LINK */}
         <div className="text-center mt-4">
             <Link to="/auth" className="text-sm text-gray-500 hover:text-gray-700">
                 &larr; Go Back

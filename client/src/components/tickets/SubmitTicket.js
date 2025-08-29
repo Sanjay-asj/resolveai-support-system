@@ -1,25 +1,16 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import api from '../../utils/api';
 
 const SubmitTicket = () => {
-  const [formData, setFormData] = useState({
-    title: '',
-    description: '',
-    category: 'General Inquiry', // Default category
-  });
-
+  const [formData, setFormData] = useState({ title: '', description: '', category: 'General Inquiry' });
   const { title, description, category } = formData;
 
   const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value });
 
   const onSubmit = async e => {
     e.preventDefault();
-    const token = localStorage.getItem('token');
-    const config = { headers: { 'Content-Type': 'application/json', 'x-auth-token': token } };
-    // Include category in the body
-    const body = JSON.stringify({ title, description, category });
     try {
-      await axios.post('http://localhost:5000/api/tickets', body, config);
+      await api.post('/tickets', { title, description, category });
       alert('Ticket submitted successfully!');
       setFormData({ title: '', description: '', category: 'General Inquiry' });
     } catch (err) {
@@ -31,15 +22,11 @@ const SubmitTicket = () => {
     <div className="bg-white p-8 rounded-lg shadow-md max-w-2xl mx-auto">
       <h2 className="text-2xl font-bold mb-6 text-center">Submit a New Ticket</h2>
       <form onSubmit={onSubmit}>
-        {/* --- NEW CATEGORY DROPDOWN --- */}
         <div className="mb-4">
           <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="category">Category</label>
           <select
-            id="category"
-            name="category"
-            value={category}
-            onChange={onChange}
-            className="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            id="category" name="category" value={category} onChange={onChange}
+            className="shadow border rounded w-full py-2 px-3 text-gray-700"
           >
             <option value="General Inquiry">General Inquiry</option>
             <option value="Technical">Technical</option>
